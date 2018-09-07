@@ -8,10 +8,17 @@ app.use('/css',express.static(__dirname + '/css'));
 app.use('/js',express.static(__dirname + '/js'));
 app.use('/bower_components',express.static(__dirname + '/bower_components'));
 app.use('/assets',express.static(__dirname + '/assets'));
+app.use('/imagenes',express.static(__dirname + '/imagenes'));
+
+
+app.get('/game',function(req,res){
+	res.sendFile(__dirname+'/index.htm');
+});
 
 app.get('/',function(req,res){
-    res.sendFile(__dirname+'/index.htm');
+	res.sendFile(__dirname+'/index.html');
 });
+
 
 server.lastPlayderID = 0;
 server.lastBulletID = 0;

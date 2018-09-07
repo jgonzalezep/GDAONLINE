@@ -55,8 +55,7 @@ Player.prototype.damage = function(health) {
 
 };
 
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(849, 640, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload () {
 
@@ -65,10 +64,12 @@ function preload () {
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
+    game.load.image('logo', 'assets/games/tanks/logo.png');
     
 }
 
 var land;
+var logo;
 var playerMap = {};
 //var playerId = 0;
 var myPlayer;
@@ -86,12 +87,17 @@ var leftKey;
 var rightKey;
 
 function create () {
+    // logo
+    logo = game.add.sprite(0, 200, 'logo');
+    logo.fixedToCamera = true;
+    game.input.onDown.add(removeLogo, this);
+
 
     //  Resize our game world to be a 2000 x 2000 square
     game.world.setBounds(-1000, -1000, 1000, 1000);
 
     //  Our tiled scrolling background
-    land = game.add.tileSprite(0, 0, 800, 600, 'earth');
+    land = game.add.tileSprite(0, 0, 846, 636, 'earth');
     land.fixedToCamera = true;
 
     Client.askNewPlayer();
@@ -102,7 +108,7 @@ function create () {
     bullets.physicsBodyType = Phaser.Physics.ARCADE;
     bullets.createMultiple(30, 'bullet', 0, false);
     bullets.setAll('anchor.x', 0.5);
-    bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('anchor.y', 0.9);
     bullets.setAll('checkWorldBounds', true);
     for(var i = 0; i < 30; ++i)
     {
@@ -132,6 +138,13 @@ function create () {
 	    Client.sendMovement(Math.round(myPlayer.sprite.x), Math.round(myPlayer.sprite.y), currentSpeed, myPlayer.sprite.rotation, myPlayer.sprite.children[2].rotation);
 	}
     },125);
+}
+
+function removeLogo () {
+
+    game.input.onDown.remove(removeLogo, this);
+    logo.kill();
+
 }
 
 function update () {
